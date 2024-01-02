@@ -2,7 +2,7 @@
 title: "A tunable adstock step function"
 author: "Milt"
 date: "2021-11-02"
-categories: ["R", " Tidymodels"]
+categories: ["Data Science/Programming"]
 ---
 
 ```{r, echo=FALSE}

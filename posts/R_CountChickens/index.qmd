@@ -2,7 +2,7 @@
 title: "Count Your Chickens!"
 author: "Milt"
 date: "2022-10-12"
-categories: ["R", " Just for Fun"]
+categories: ["Data Science/Programming"]
 ---
 
 ```{r setup, include=FALSE}

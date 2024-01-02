@@ -2,7 +2,7 @@
 title: "Scraping web data with R and Docker"
 author: "Milt"
 date: "2020-10-28"
-categories: ["R", " Docker", " Webscraping"]
+categories: ["Data Science/Programming"]
 ---
 
 ### Introduction

@@ -1,0 +1,41 @@
+---
+title: "Using renv to create reproducible posts."
+author: "Milt"
+date: "2024-01-01"
+categories: ["Data Science/Programming"]
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+library(data.table)
+```
+
+1. Create a new project inside your posts folder.
+2. install renv if not already installed using 'install.packages("renv")'.
+3. initiate renv using 'renv::init()'.
+4. Write code/post.
+5. Take a renv snapshot using 'renv::snapshot()'.
+
+
+
+
+### step 4: write some code, install additional packages as needed.
+
+```{r}
+
+DT = data.table(
+  ID = c("b","b","b","a","a","c"),
+  a = 1:6,
+  b = 7:12,
+  c = 13:18
+)
+DT
+
+
+```
+
+
+```{r}
+
+```

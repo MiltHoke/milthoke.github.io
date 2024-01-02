@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Milt">
-<meta name="dcterms.date" content="2020-10-28">
+<meta name="dcterms.date" content="2024-01-01">
 
-<title>Milt-Hoke.com - Scraping web data with R and Docker</title>
+<title>Milt-Hoke.com - Using renv to create reproducible posts.</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -133,7 +133,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Scraping web data with R and Docker</h1>
+      <h1 class="title">Using renv to create reproducible posts.</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">Data Science/Programming</div>
               </div>
@@ -153,7 +153,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">October 28, 2020</p>
+        <p class="date">January 1, 2024</p>
       </div>
     </div>
     
@@ -171,87 +171,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="introduction" class="level3">
-<h3 class="anchored" data-anchor-id="introduction">Introduction</h3>
-<p>I’ve spent a considerable amount of time sifting through tutorials on how to scrape data from the web. Both R and Python offer tools to easily parse html data but so far the only easy solution I’ve found to scrape dynamic data rendered though JS (maybe it’s JS?, either way it shows up magicially on the screen but isn’t in the html to parse) is in R.</p>
-<p>For this little project we will be recording the building capacity counts for the UW Madison Rec. Inside this site there are two pages we’ll want to scrape. The first page is the overall building capactiy at <code>https://services.recwell.wisc.edu/FacilityOccupancy</code> and a more granular look at specific area capactiy in <code>https://recwell.wisc.edu/liveusage/</code>.</p>
-<p>Lastly, I don’t remember what I’ve installed onto my computer to make this all run, but you don’t need to worry about that because we’ll also put together a docker image you can build to easily run both of the examples below.</p>
-</section>
-<section id="using-rvest-easy-mode" class="level3">
-<h3 class="anchored" data-anchor-id="using-rvest-easy-mode">Using rvest (EASY MODE)</h3>
-<p>First we’ll start with scraping overall building occupancy. For this we just need to grab the HTML from the URL <code>https://services.recwell.wisc.edu/FacilityOccupancy</code> and strip out the numbers that we want using their xpaths.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rvest)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>urlPath <span class="ot">&lt;-</span> <span class="st">'https://services.recwell.wisc.edu/FacilityOccupancy'</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(urlPath) </span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#output of html</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> html</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>{html_document}  </span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="sc">&lt;</span>html lang<span class="ot">=</span><span class="st">"en-US"</span><span class="sc">&gt;</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="sc">&lt;</span>head<span class="sc">&gt;</span>\n<span class="sc">&lt;</span>meta http<span class="sc">-</span>equiv<span class="ot">=</span><span class="st">"Content-Type"</span> content<span class="ot">=</span><span class="st">"text/html; charset=UTF-8"</span><span class="sc">&gt;</span>\n<span class="sc">&lt;</span>link rel<span class="ot">=</span><span class="st">"icon"</span> href<span class="ot">=</span><span class="st">"~/favicon.ico"</span><span class="sc">&gt;</span>\n<span class="sc">&lt;</span>meta charset<span class="ot">=</span><span class="st">"utf-8"</span><span class="sc">&gt;</span>\n<span class="sc">&lt;</span>meta name<span class="ot">=</span><span class="st">"v </span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="st">[2] &lt;body&gt;</span><span class="sc">\r\n</span><span class="st">    &lt;div role="</span>complementary<span class="st">" aria-label="</span>skip to main content<span class="st">"&gt;&lt;a id="</span>skipLink<span class="st">" class="</span>skip<span class="sc">-</span>main<span class="st">" tabindex="</span><span class="dv">1</span><span class="st">" onclick="</span><span class="sc">$</span>(<span class="st">'#mainContent'</span>)<span class="fu">.find</span>( </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Now we have a list of html text stored in the variable <code>html</code> (output shown above). Inside of <code>html</code> are the two numbers we want to extract: Current Occupancy and max Occupancy. First you need to find the xpaths (or something similiar) for each occupancy value you want to pull out. If you don’t know how to do this just search for ‘finding xpath in chrome’ and you’re sure to find something. Once you have the xpath for the values you want the rest is pretty straightforward.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>occupancy <span class="ot">&lt;-</span> </span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  html <span class="sc">%&gt;%</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_nodes</span>(<span class="at">xpath=</span><span class="st">'//*[@id="occupancy-65cc2f42-1ca8-4afe-bf5a-990b1a9e4111"]/div[2]/p[3]/strong | //*[@id="occupancy-65cc2f42-1ca8-4afe-bf5a-990b1a9e4111"]/div[2]/p[1]/strong'</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_replace</span>(<span class="st">"%"</span>,<span class="st">""</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.numeric</span>() </span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> occupancy</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="dv">222</span>  <span class="dv">73</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>In the code above, <code>html_nodes()</code> will extract the values we want from the html based on the xpaths we gave it to look for. This value will still have html tags on it (e.g.&nbsp;&lt;strong&gt; 222 &lt;/strong&gt;) which we can remove using the <code>html_text()</code> function. From there it’s just some simple cleanup to remove special characters with <code>str_replace()</code> and convert them from character into numeric using <code>as.numeric()</code>.</p>
-<p>Finally we can take our vector and turn it into a dataframe for additional manipulation.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">max_occupancy  =</span> occupancy[<span class="dv">1</span>], <span class="at">current_occupancy =</span> occupancy[<span class="dv">2</span>]<span class="sc">/</span><span class="dv">100</span>, <span class="at">pulled =</span> <span class="fu">Sys.time</span>())</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> df</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  max_occupancy current_occupancy              pulled</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span>           <span class="dv">222</span>              <span class="fl">0.73</span> <span class="dv">2020-10-28</span> <span class="dv">19</span><span class="sc">:</span><span class="dv">35</span><span class="sc">:</span><span class="dv">19</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="using-pagedown-and-pdftools" class="level3">
-<h3 class="anchored" data-anchor-id="using-pagedown-and-pdftools">Using pagedown and pdftools</h3>
-<p>OK, now lets wrap this up and head over to <code>https://recwell.wisc.edu/liveusage/</code>, grab a few xpaths and be good to go. Unfortunatly this one isn’t quite as easy.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>urlPath <span class="ot">&lt;-</span> <span class="st">'https://recwell.wisc.edu/liveusage/'</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(urlPath)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>html <span class="sc">%&gt;%</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">html_nodes</span>(<span class="at">xpath=</span><span class="st">'//*[@id="nick"]/div/div[2]/div[2]/div/div/div[1]/div/div[2]/p[2]/span[1]'</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text</span>()</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"0"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The code above will return 0 instead of 18 which is the correct value at the time I ran this example. I believe 0 is a placeholder and the actual value gets updated at a later time. Either way, it doesn’t look like the method we used above will work for us so we’ll have to shift gears a bit.</p>
-<p>The most reliable way I’ve found to scrape this type of data is to use <code>pagedown</code> to print the page to a pdf. Then use <code>pdftools</code> to read the pdf back into R. Then use some regular expression magic to parse everything you need.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Set some variables</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pdftools)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>urlPath <span class="ot">&lt;-</span> <span class="st">'https://recwell.wisc.edu/liveusage/'</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>pdfPath <span class="ot">&lt;-</span> <span class="st">"./rec.pdf"</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Print out the webpage to pdf using pagedown</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>pagedown<span class="sc">::</span><span class="fu">chrome_print</span>(urlPath,pdfPath,<span class="at">extra_args =</span> <span class="st">'--no-sandbox'</span>)</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Read in the pdf again using pdftools (and some stringr magic)</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">str_squish</span>(<span class="fu">unlist</span>(<span class="fu">str_split</span>(<span class="fu">str_flatten</span>(<span class="fu">pdf_text</span>(pdfPath)),<span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)))</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">#Use regular expressions to parse out the data we want to keep</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>values_bool <span class="ot">&lt;-</span> <span class="fu">str_detect</span>(x,<span class="st">"^Updated (.*?) </span><span class="sc">\\</span><span class="st">d+ / </span><span class="sc">\\</span><span class="st">d+"</span>)</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>label_bool <span class="ot">&lt;-</span> values_bool[<span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="fu">length</span>(values_bool),<span class="cn">FALSE</span>)]</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co">#Turn it into a dataframe for additional manipulation.</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">location =</span> x[label_bool],<span class="at">values =</span> x[values_bool])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="making-it-easy-with-docker" class="level3">
-<h3 class="anchored" data-anchor-id="making-it-easy-with-docker">Making it easy with Docker</h3>
-<p>You can build your own image using the Dockerfile code below, or pull mine from docker hub at mjholt02/pagedown.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>FROM r<span class="sc">-</span>base</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>RUN apt<span class="sc">-</span>get update <span class="sc">-</span>qq <span class="sc">&amp;&amp;</span> apt<span class="sc">-</span>get <span class="sc">-</span>y install libssl<span class="sc">-</span>dev \</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    chromium libcurl4<span class="sc">-</span>openssl<span class="sc">-</span>dev \ </span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    libxml2<span class="sc">-</span>dev libpoppler<span class="sc">-</span>cpp<span class="sc">-</span>dev libpq<span class="sc">-</span>dev</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>RUN install2.r RPostgres pagedown pdftools tidyverse \ </span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    rvest</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>From there is as easy as starting up an interactive container using <code>docker run --rm -it mjholt02/pagedown</code> or <code>winpty docker run --rm -it mjholt02/pagedown</code> if you’re using git bash.</p>
+<ol type="1">
+<li>Create a new project inside your posts folder.</li>
+<li>install renv if not already installed using ‘install.packages(“renv”)’.</li>
+<li>initiate renv using ‘renv::init()’.</li>
+<li>Write code/post.</li>
+<li>Take a renv snapshot using ‘renv::snapshot()’.</li>
+</ol>
+<section id="step-4-write-some-code-install-additional-packages-as-needed." class="level3">
+<h3 class="anchored" data-anchor-id="step-4-write-some-code-install-additional-packages-as-needed.">step 4: write some code, install additional packages as needed.</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>DT <span class="ot">=</span> <span class="fu">data.table</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">ID =</span> <span class="fu">c</span>(<span class="st">"b"</span>,<span class="st">"b"</span>,<span class="st">"b"</span>,<span class="st">"a"</span>,<span class="st">"a"</span>,<span class="st">"c"</span>),</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">a =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">b =</span> <span class="dv">7</span><span class="sc">:</span><span class="dv">12</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">c =</span> <span class="dv">13</span><span class="sc">:</span><span class="dv">18</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>DT</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="do">##    ID a  b  c</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="do">## 1:  b 1  7 13</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="do">## 2:  b 2  8 14</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="do">## 3:  b 3  9 15</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="do">## 4:  a 4 10 16</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="do">## 5:  a 5 11 17</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="do">## 6:  c 6 12 18</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 
 
 </section>

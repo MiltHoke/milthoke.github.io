@@ -2,8 +2,8 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/renv_blog/index.html",
       "/posts/R_CountChickens/index.html",
-      "/posts/step_adstock/index.html",
       "/posts/webscraping/index.html"
     ]
   }
