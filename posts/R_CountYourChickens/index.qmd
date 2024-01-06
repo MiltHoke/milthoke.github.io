@@ -8,7 +8,9 @@ categories: ["Data Science/Programming"]
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(collapse = TRUE)
 
-library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(stringr)
 library(doParallel)
 ```
 

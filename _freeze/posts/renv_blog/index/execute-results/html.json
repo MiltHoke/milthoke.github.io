@@ -1,7 +1,7 @@
 {
-  "hash": "ed38c11e183f7d3194dceb20bd6ad4b7",
+  "hash": "dce5202da8903fe32259fcf8d7385888",
   "result": {
-    "markdown": "---\ntitle: \"Using renv to create reproducible posts.\"\nauthor: \"Milt\"\ndate: \"2024-01-01\"\ncategories: [\"Data Science/Programming\"]\n---\n\n\n\n\n1. Create a new project inside your posts folder.\n2. install renv if not already installed using 'install.packages(\"renv\")'.\n3. initiate renv using 'renv::init()'.\n4. Write code/post.\n5. Take a renv snapshot using 'renv::snapshot()'.\n\n\n\n\n### step 4: write some code, install additional packages as needed.\n\n\n::: {.cell}\n\n```{.r .cell-code}\n\nDT = data.table(\n  ID = c(\"b\",\"b\",\"b\",\"a\",\"a\",\"c\"),\n  a = 1:6,\n  b = 7:12,\n  c = 13:18\n)\nDT\n##    ID a  b  c\n## 1:  b 1  7 13\n## 2:  b 2  8 14\n## 3:  b 3  9 15\n## 4:  a 4 10 16\n## 5:  a 5 11 17\n## 6:  c 6 12 18\n```\n:::\n\n::: {.cell}\n\n:::\n",
+    "markdown": "---\ntitle: \"Using renv to create reproducible posts.\"\nauthor: \"Milt\"\ndate: \"2024-01-01\"\ncategories: [\"Data Science/Programming\"]\n---\n\n\n\n\n1.  Create a new project inside your posts folder.\n2.  install renv if not already installed using 'install.packages(\"renv\")'.\n3.  initiate renv using 'renv::init()'.\n4.  Write code/post.\n5.  Take a renv snapshot using 'renv::snapshot()'.\n\n### step 4: write some code, install additional packages as needed.\n\n\n::: {.cell}\n\n```{.r .cell-code}\n\nDT = data.table(\n  ID = c(\"b\",\"b\",\"b\",\"a\",\"a\",\"c\"),\n  a = 1:6,\n  b = 7:12,\n  c = 13:18\n)\nDT\n##    ID a  b  c\n## 1:  b 1  7 13\n## 2:  b 2  8 14\n## 3:  b 3  9 15\n## 4:  a 4 10 16\n## 5:  a 5 11 17\n## 6:  c 6 12 18\n```\n:::\n\n::: {.cell}\n\n:::\n",
     "supporting": [],
     "filters": [
       "rmarkdown/pagebreak.lua"

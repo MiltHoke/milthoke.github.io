@@ -1,26 +1,31 @@
 ---
-title: "Using renv to create reproducible posts."
+title: "Using renv to create reproducible Quarto documents."
 author: "Milt"
-date: "2024-01-01"
+date: "2024-01-02"
 categories: ["Data Science/Programming"]
 ---
 
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(collapse = TRUE)
-library(data.table)
 ```
 
-1. Create a new project inside your posts folder.
-2. install renv if not already installed using 'install.packages("renv")'.
-3. initiate renv using 'renv::init()'.
-4. Write code/post.
-5. Take a renv snapshot using 'renv::snapshot()'.
+# Building a project using renv.
 
+## Create a new project.
 
+## install renv if not already installed using 'install.packages("renv")'.
 
+## initiate renv using 'renv::init()'.
 
-### step 4: write some code, install additional packages as needed.
+## Write code.
+
+## Take a renv snapshot using 'renv::snapshot()'.
+
+## renv::deactivate(clean = TRUE)
+
+# Inheriting a project that used renv
+
+## renv::restore()
 
 ```{r}
 
@@ -34,7 +39,6 @@ DT
 
 
 ```
-
 
 ```{r}
 
